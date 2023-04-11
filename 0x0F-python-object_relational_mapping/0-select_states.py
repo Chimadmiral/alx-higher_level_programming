@@ -1,16 +1,22 @@
 #!/usr/bin/python3
-"""Lists states"""
+'''import required modules'''
 
 import MySQLdb
-from sys import argv
+import sys
+from db_conn import connect_db
+
+'''
+    Command line arguments for for mysql username,
+    mysql password, and database name
+'''
+_args = sys.argv
 
 if __name__ == "__main__":
-    conn = MySQLdb.connect(host="localhost", port=3306, user=argv[1],
-                           passwd=argv[2], db=argv[3], charset="utf8")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM states ORDER BY states.id ASC")
+    db = connect_db(_args[1:])
+    cur = db.cursor()
+    cur.execute("SELECT * FROM states ORDER BY id ASC")
     query_rows = cur.fetchall()
     for row in query_rows:
         print(row)
     cur.close()
-    conn.close()
+    db.close()
